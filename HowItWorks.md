@@ -125,7 +125,7 @@ def zen(func):
 
     # Execute recompiled source in the original scope of the function
     #   locals retains the original scope of the function
-    locals = inspect.currentframe().f_back.f_back.f_locals
+    locals = inspect.currentframe().f_back.f_locals
     a = compile(source, '<zen>', 'exec')
     exec(a, locals)
     new_function = locals[func.__name__]
