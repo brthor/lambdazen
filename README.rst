@@ -38,7 +38,7 @@ Get started immediately: ``pip install lambdazen``
 
 TLDR; Runtime in-memory source rewriting and recompilation
 
-.. _Read the story: /HowItWorks.md
+.. _Read the story: https://github.com/brthornbury/lambdazen/blob/master/HowItWorks.md
 
 .. |Build Status| image:: https://travis-ci.org/brthornbury/lambdazen.svg?branch=master
    :target: https://travis-ci.org/brthornbury/lambdazen

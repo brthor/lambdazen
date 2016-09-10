@@ -28,7 +28,7 @@ example.epic(1,2,3)
 
 **How does it work**
 
-[Read the story](/HowItWorks.md)
+[Read the story](https://github.com/brthornbury/lambdazen/blob/master/HowItWorks.md)
 
 TLDR; Runtime in-memory source rewriting and recompilation
 
