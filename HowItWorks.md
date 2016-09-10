@@ -28,16 +28,23 @@ _.add1(1)
 
 You might be wondering, what could the `_` function and `zen` attribute possibly be doing to make this work. I'll admit, `_` being needed is not my favorite thing, but it's necessary. 
 
-But wait... let's look at a couple of the interesting options that looked promising for this, but ultimately failed. 
-[Or jump To the end](#Function source rewriting)
+But wait, before we dig into why it's necessary... let's look at a couple of the interesting options that looked promising for this, but ultimately failed. 
 
 ### Infix Operators
 
-My first thoughts went back to c++ days and operator overloads. Research into these in python yielded some interesting results. There's not any native support for operator overloads, but somebody discovered a clever solution taking advantage of hooks into the existing operators `|, <<, >>` to create what they call [infix operators](http://code.activestate.com/recipes/384122-infix-operators/). While infix operators are pretty cool, there's no way to get the unevaluated expression on either side of the operator. This leaves us without options for creating any kind of function object. 
+My first thoughts went back to c++ days and operator overloads. Research into these in python yielded some interesting results. There's not any native support for operator overloads, but somebody discovered a clever solution taking advantage of hooks into the existing operators `|, <<, >>` to create what they call [infix operators](http://code.activestate.com/recipes/384122-infix-operators/). 
 
-### Bytecode rewriting
+```python
+x=Infix(lambda x,y: x*y)
+print 2 |x| 4
+>>> 8
+```
 
-Python functions all have a [code object](https://late.am/post/2012/03/26/exploring-python-code-objects.html). The code object contains the bytecode compiled python code that the interpreter executes. You can see the raw bytecode string using `func.__code__.co_code` or you can use `dis` for a human readable version.
+While infix operators are pretty cool, there's no way to get the unevaluated expression on either side of the operator. This leaves us without options for creating any kind of function object with regular looking syntax. 
+
+### Compiled Bytecode rewriting
+
+Python functions all have a [code object](https://late.am/post/2012/03/26/exploring-python-code-objects.html). The code object contains the python compiled bytecode that the interpreter executes. You can see the raw bytecode string using `func.__code__.co_code` or you can use `dis` for a human readable version.
 
 ```python
 def func():
@@ -64,7 +71,8 @@ func.__code__.co_code = [c if index != 1 else chr(5) for index,c in enumerate(fu
 >>> TypeError: readonly attribute
 ```
 
-But the whole code object can be replaced
+But the whole code object can be replaced, which changes the behavior of the function.
+
 ```python
 def func():
     return 1
@@ -79,7 +87,7 @@ print func()
 
 At this point I realized it was possible to find patterns in the bytecode and replace them with different patterns, so the basic effect of changing python syntax can be achieved during python runtime. I realized though that this would take a deep understanding of the bytecode, similar to what a compiler might have for source code. 
 
-While replacing the bytecode by [generating code objects](http://stackoverflow.com/questions/16064409/how-to-create-a-code-object-in-python) remains a viable option, I thought exploring source rewriting might take less effort being able to take advantage of the python [compiler](https://docs.python.org/2/library/compiler.html) module.
+While replacing the bytecode by [generating code objects](http://stackoverflow.com/questions/16064409/how-to-create-a-code-object-in-python) remains a viable option, I thought exploring uncompiled source rewriting might take less effort being able to take advantage of the python [compiler](https://docs.python.org/2/library/compiler.html) module.
 
 ### Zen (Source Rewriting)
 
@@ -129,15 +137,15 @@ def zen(func):
 
 Now you can easily write code like this...
 
-```
-def otherfunc(*args):
+```python
+def otherFunc(*args):
     print sum(args)
 
 @zen
-def anyname():
-    example.epic = (x, y, z) > otherfunc(x, y, z)
+def lambdaContainer():
+    lambdaContainer.func = (x, y, z) > otherFunc(x, y, z)
 
-anyname.epic(1,2,3)
+lambdaContainer.func(1,2,3)
 >>> 6
 ```
 

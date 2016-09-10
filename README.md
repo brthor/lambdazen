@@ -2,7 +2,9 @@
 
 **What is this?**
 
-A better python lambda syntax for your anonymous function needs. Write code like `a = (x) > x` instead of `a = lambda x: x`. See below for syntax caveats.
+A better python lambda syntax for your anonymous function needs. 
+Write `a = (x) > x` instead of `a = lambda x: x`. 
+See below for syntax caveats.
 
 Get started immediately: `pip install lambda-zen`
 
@@ -24,6 +26,8 @@ example.epic(1,2,3)
  - any other code in this function will be executed, it's best to use the function as a container of lambdas
 
 **How does it work**
+
 [Read the story](/HowItWorks.md)
+
 TLDR; Runtime in-memory source rewriting and recompilation
 
