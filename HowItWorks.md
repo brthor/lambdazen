@@ -124,10 +124,11 @@ def zen(func):
     source = re.sub('@zen', '', source)
 
     # Execute recompiled source in the original scope of the function
-    #   func_globals retains the original scope of the function
+    #   locals retains the original scope of the function
+    locals = inspect.currentframe().f_back.f_back.f_locals
     a = compile(source, '<zen>', 'exec')
-    exec(a, func.func_globals)
-    new_function = func.func_globals[func.__name__]
+    exec(a, locals)
+    new_function = locals[func.__name__]
 
     # Call the new function to bind the lambdas to the intended members on the new_function object
     new_function()

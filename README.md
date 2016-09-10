@@ -7,7 +7,7 @@ A better python lambda syntax for your anonymous function needs.
 
 Write `a = (x) > x` instead of `a = lambda x: x`. See below for syntax caveats.
 
-Get started immediately: `pip install lambda-zen`
+Get started immediately: `pip install lambdazen`
 
 ```python
 from lambdazen import zen
