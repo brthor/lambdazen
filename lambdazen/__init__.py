@@ -1,0 +1,1 @@
+from lambdazen import zen

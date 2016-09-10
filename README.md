@@ -3,13 +3,13 @@
 **What is this?**
 
 A better python lambda syntax for your anonymous function needs. 
-Write `a = (x) > x` instead of `a = lambda x: x`. 
-See below for syntax caveats.
+
+Write `a = (x) > x` instead of `a = lambda x: x`. See below for syntax caveats.
 
 Get started immediately: `pip install lambda-zen`
 
 ```python
-from lambda-zen import zen
+from lambdazen import zen
 def otherfunc(*args):
     print sum(args)
 
