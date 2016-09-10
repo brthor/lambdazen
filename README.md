@@ -1,4 +1,5 @@
 ### A Better Lambda
+[![Build Status](https://travis-ci.org/brthornbury/lambdazen.svg?branch=master)](https://travis-ci.org/brthornbury/lambdazen)
 
 **What is this?**
 
