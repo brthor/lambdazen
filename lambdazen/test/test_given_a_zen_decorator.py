@@ -54,3 +54,14 @@ class GivenAZenDecorator(unittest.TestCase):
             self.assertTrue(lambdaContainer.func(1,5,7) == 13)
 
         outer()
+
+    def test_It_creates_multiple_functions(self):
+        @zen
+        def lambdaContainer():
+            lambdaContainer.func = () > "hello"
+            lambdaContainer.func2 = (x) > x + 1
+            lambdaContainer.func3 = (x) > x * 2
+
+        self.assertTrue(lambdaContainer.func() == "hello")
+        self.assertTrue(lambdaContainer.func2(1) == 2)
+        self.assertTrue(lambdaContainer.func3(5) == 10)
