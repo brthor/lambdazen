@@ -2,29 +2,6 @@
 import inspect
 import re
 
-create_cell = lambda x: (lambda: x).func_closure[0]
-
-def forcesetattr(obj, attr_name, attr_value):
-    import ctypes
-
-    def magic_get_dict(o):
-        # find address of dict whose offset is stored in the type
-        dict_addr = id(o) + type(o).__dictoffset__
-
-        # retrieve the dict object itself
-        dict_ptr = ctypes.cast(dict_addr, ctypes.POINTER(ctypes.py_object))
-        return dict_ptr.contents.value
-
-    def magic_flush_mro_cache():
-        ctypes.PyDLL(None).PyType_Modified(ctypes.cast(id(object), ctypes.py_object))
-
-    # monkey-patch file.write
-    dct = magic_get_dict(obj)
-    dct[attr_name] = attr_value
-
-    # flush the method cache for the monkey-patch to take effect
-    magic_flush_mro_cache()
-
 def _replace_match(match):
     vars = match.groups(1)[0]
     return "= lambda {0}:".format(vars)
