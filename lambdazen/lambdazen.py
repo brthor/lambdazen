@@ -39,8 +39,3 @@ def _zen_decorator(func):
 
 def zen(func):
     return _zen_decorator(func)
-
-
-
-
-
