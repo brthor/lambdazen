@@ -1,6 +1,8 @@
 import unittest
 from lambdazen import zen
 
+module_var = "module_var"
+
 class GivenAZenDecorator(unittest.TestCase):
     def test_It_creates_functions_from_alternate_lambda_syntax(self):
 
@@ -65,3 +67,26 @@ class GivenAZenDecorator(unittest.TestCase):
         self.assertTrue(lambdaContainer.func() == "hello")
         self.assertTrue(lambdaContainer.func2(1) == 2)
         self.assertTrue(lambdaContainer.func3(5) == 10)
+
+    def test_It_creates_functions_that_use_values_outside_function_scope(self):
+        outer_var = 5
+
+        @zen
+        def lambdaContainer():
+            lambdaContainer.func = () > outer_var
+            lambdaContainer.func2 = (x) > outer_var + x
+
+        self.assertTrue(lambdaContainer.func() == 5)
+        self.assertTrue(lambdaContainer.func2(5) == 10)
+
+    def test_It_creates_functions_that_use_values_in_module_scope(self):
+        outer_var = "s"
+
+        @zen
+        def lambdaContainer():
+            lambdaContainer.func = () > module_var
+            lambdaContainer.func2 = (x) > module_var + outer_var + x
+
+        self.assertTrue(lambdaContainer.func() == "module_var")
+        self.assertTrue(lambdaContainer.func2("t") == "module_varst")
+
