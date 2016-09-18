@@ -153,3 +153,5 @@ lambdaContainer.func(1,2,3)
 Having to hide the new lambda expression under a function is non-ideal but necessary for the moment. Perhaps future research will show more usable patterns. 
 
 Until then, enjoy...
+
+*EDIT:* The code in the (repository)[https://github.com/brthornbury/lambdazen] has been updated to use AST transformations. Benefits include multiline lambda syntax and lists of single line lambdas.
