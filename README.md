@@ -1,6 +1,7 @@
 ### A Better Lambda
 [![PyPI version](https://badge.fury.io/py/lambdazen.svg)](https://badge.fury.io/py/lambdazen)
 [![Build Status](https://travis-ci.org/brthornbury/lambdazen.svg?branch=master)](https://travis-ci.org/brthornbury/lambdazen)
+*Supports Python 2.6 - 3.5*
 
 **What is this?**
 

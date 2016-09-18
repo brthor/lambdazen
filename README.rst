@@ -3,6 +3,7 @@ A Better Lambda
 
 | |PyPI version|
 | |Build Status|
+| *Supports Python 2.6 - 3.5*
 
 **What is this?**
 
@@ -70,7 +71,9 @@ TLDR; Runtime in-memory source rewriting and recompilation
 
         apply_all = (transforms_list, s) > (
             is_done << (len(transforms_list) == 0),
-            transforms_list[0](apply_all(transforms_list[1:], s)) if not is_done else s)
+            current_transform << transforms_list[0] if not is_done else None,
+            remaining_transforms << transforms_list[1:] if not is_done else None,
+            current_transform(apply_all(remaining_transforms, s)) if not is_done else s)
 
         return apply_all(transforms, nS)
 
