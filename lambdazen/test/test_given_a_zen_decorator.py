@@ -19,6 +19,7 @@ class GivenAZenDecorator(unittest.TestCase):
         self.assertTrue(lambdaContainer.func(3) == 4)
 
     def test_It_creates_functions_out_of_multiline_syntax(self):
+        outer_var = 's'
 
         @zen
         def lambdaContainer():
@@ -32,8 +33,31 @@ class GivenAZenDecorator(unittest.TestCase):
                 s
             ]
 
+            lambdaContainer.outerFunc = () > (
+                s << outer_var,
+                s
+            )
+
+            lambdaContainer.moduleFunc = () > (
+                s << module_var,
+                s
+            )
+
+            lambdaContainer.combinedScopeFunc = (x) > (
+                s << module_var + outer_var + x,
+                s
+            )
+
+            lambdaContainer.singleLineTest = () > (
+                1
+            )
+
         self.assertTrue(lambdaContainer.func(1,2,3) == 6)
         self.assertTrue(lambdaContainer.func2(1, 2, 3) == 6)
+        self.assertTrue(lambdaContainer.outerFunc() == outer_var)
+        self.assertTrue(lambdaContainer.moduleFunc() == module_var)
+        self.assertTrue(lambdaContainer.combinedScopeFunc("t") == (module_var + outer_var + "t"))
+        self.assertTrue(lambdaContainer.singleLineTest() == 1)
 
     def test_It_creates_functions_with_multiple_arguments(self):
         

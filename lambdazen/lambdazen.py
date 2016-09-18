@@ -99,9 +99,6 @@ def _transform_ast(code_ast):
     return code_ast
 
 def _zen_decorator(func):
-    # Look for (x, y, ..., z) >
-    lambda_syntax_regex = r'=\s*\(([^\)]*)\)\s*>'
-
     source = inspect.getsource(func)
 
     # remove leading whitespace
