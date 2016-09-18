@@ -10,6 +10,8 @@ class GivenAZenDecorator(unittest.TestCase):
         def lambdaContainer():
             lambdaContainer.func = (x) > x + 1
 
+        lambdaContainer()
+
         def emptyFunction():
             pass
 
@@ -51,6 +53,7 @@ class GivenAZenDecorator(unittest.TestCase):
             lambdaContainer.singleLineTest = () > (
                 1
             )
+        lambdaContainer()
 
         self.assertTrue(lambdaContainer.func(1,2,3) == 6)
         self.assertTrue(lambdaContainer.func2(1, 2, 3) == 6)
@@ -65,12 +68,16 @@ class GivenAZenDecorator(unittest.TestCase):
         def lambdaContainer():
             lambdaContainer.func = (x, y, z) > x + y + z
 
+        lambdaContainer()
+
         self.assertTrue(lambdaContainer.func(1,3,5) == 9)
 
     def test_It_creates_functions_with_no_arguments(self):
         @zen
         def lambdaContainer():
             lambdaContainer.func = () > "hello"
+
+        lambdaContainer()
 
         self.assertTrue(lambdaContainer.func() == "hello")
 
@@ -81,6 +88,8 @@ class GivenAZenDecorator(unittest.TestCase):
         @zen
         def lambdaContainer():
             lambdaContainer.func = (x, y, z) > otherfunc(x,y,z)
+
+        lambdaContainer()
 
         self.assertTrue(lambdaContainer.func(1,5,7) == 13)
 
@@ -94,6 +103,8 @@ class GivenAZenDecorator(unittest.TestCase):
             def lambdaContainer():
                 lambdaContainer.func = (x, y, z) > otherfunc(x,y,z)
 
+            lambdaContainer()
+
             self.assertTrue(lambdaContainer.func(1,5,7) == 13)
 
         outer()
@@ -104,6 +115,8 @@ class GivenAZenDecorator(unittest.TestCase):
             lambdaContainer.func = () > "hello"
             lambdaContainer.func2 = (x) > x + 1
             lambdaContainer.func3 = (x) > x * 2
+
+        lambdaContainer()
 
         self.assertTrue(lambdaContainer.func() == "hello")
         self.assertTrue(lambdaContainer.func2(1) == 2)
@@ -117,6 +130,8 @@ class GivenAZenDecorator(unittest.TestCase):
             lambdaContainer.func = () > outer_var
             lambdaContainer.func2 = (x) > outer_var + x
 
+        lambdaContainer()
+
         self.assertTrue(lambdaContainer.func() == 5)
         self.assertTrue(lambdaContainer.func2(5) == 10)
 
@@ -127,6 +142,8 @@ class GivenAZenDecorator(unittest.TestCase):
         def lambdaContainer():
             lambdaContainer.func = () > module_var
             lambdaContainer.func2 = (x) > module_var + outer_var + x
+
+        lambdaContainer()
 
         self.assertTrue(lambdaContainer.func() == "module_var")
         self.assertTrue(lambdaContainer.func2("t") == "module_varst")

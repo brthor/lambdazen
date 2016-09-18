@@ -21,12 +21,15 @@ def example():
     example.epic = (x, y, z) > otherfunc(x, y, z)
 
     # Multiline lambdas are a tuple or list of statements
-    # The assignment operator inside is << instead of x
+    # The assignment operator inside is << instead of =
     # The last statement is the return value
     example.multiline = (x, y, z) > (
-        s << x + y + z,
+        s << otherfunc(x, y, z),
         s
     )
+
+# Call function so the lambdas are bound to function attributes
+example()
 
 example.epic(1,2,3)
 >>> 6
@@ -44,4 +47,3 @@ example.multiline(1,2,3)
 [Read the story](https://github.com/brthornbury/lambdazen/blob/master/HowItWorks.md)
 
 TLDR; Runtime in-memory source rewriting and recompilation
-

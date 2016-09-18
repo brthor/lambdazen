@@ -122,10 +122,7 @@ def _zen_decorator(func):
     recompiled_source = compile(code_ast, '<zen>', 'exec')
     exec(recompiled_source, globals)
 
-    # Execute the new function to bind the inner lambdas to the function object attributes
     new_function = globals[func.__name__]
-    exec(new_function.__code__, globals)
-
     return new_function
 
 def zen(func):
