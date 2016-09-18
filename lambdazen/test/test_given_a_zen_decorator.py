@@ -18,11 +18,28 @@ class GivenAZenDecorator(unittest.TestCase):
         self.assertTrue(lambdaContainer.func(2) == 3)
         self.assertTrue(lambdaContainer.func(3) == 4)
 
+    def test_It_creates_functions_out_of_multiline_syntax(self):
+
+        @zen
+        def lambdaContainer():
+            lambdaContainer.func = (x, y, z) > (
+                s << x + y + z,
+                s
+            )
+
+            lambdaContainer.func2 = (x, y, z) > [
+                s << x + y + z,
+                s
+            ]
+
+        self.assertTrue(lambdaContainer.func(1,2,3) == 6)
+        self.assertTrue(lambdaContainer.func2(1, 2, 3) == 6)
+
     def test_It_creates_functions_with_multiple_arguments(self):
         
         @zen
         def lambdaContainer():
-            lambdaContainer.func = (x,y,z) > x + y + z
+            lambdaContainer.func = (x, y, z) > x + y + z
 
         self.assertTrue(lambdaContainer.func(1,3,5) == 9)
 
@@ -89,4 +106,6 @@ class GivenAZenDecorator(unittest.TestCase):
 
         self.assertTrue(lambdaContainer.func() == "module_var")
         self.assertTrue(lambdaContainer.func2("t") == "module_varst")
+
+
 

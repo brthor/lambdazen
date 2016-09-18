@@ -15,11 +15,23 @@ from lambdazen import zen
 def otherfunc(*args):
     print sum(args)
 
+# The zen decorator allows you to define lambdas with a better syntax
 @zen
 def example():
     example.epic = (x, y, z) > otherfunc(x, y, z)
 
+    # Multiline lambdas are a tuple or list of statements
+    # The assignment operator inside is << instead of x
+    # The last statement is the return value
+    example.multiline = (x, y, z) > (
+        s << x + y + z,
+        s
+    )
+
 example.epic(1,2,3)
+>>> 6
+
+example.multiline(1,2,3)
 >>> 6
 ```
 
