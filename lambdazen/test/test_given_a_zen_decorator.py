@@ -10,6 +10,8 @@ class GivenAZenDecorator(unittest.TestCase):
         def lambdaContainer():
             lambdaContainer.func = (x) > x + 1
 
+            lambdaContainer.x = lambda y: y+1
+
         lambdaContainer()
 
         def emptyFunction():

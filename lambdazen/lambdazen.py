@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import inspect
 import re
-import compiler, ast, _ast
+import ast, _ast
 
 def _replace_match(match):
     vars = match.groups(1)[0]
@@ -33,12 +33,17 @@ def _transform_multiline_return_statement(return_statement):
 
 
 def _transform_function_arguments(left):
-    names = []
     if type(left) is ast.Name:
         names = [left]
     else:
         names = left.elts
 
+    # Python3
+    if hasattr(_ast, 'arg'):
+        args = [_ast.arg(annotation=None, arg=name.id, col_offset = name.col_offset, lineno=name.lineno) for name in names]
+        return ast.arguments(args=args, defaults=[], kwonlyargs=[], kw_defaults=[])
+
+    # Python 2
     arguments = ast.arguments(args=names, defaults=[])
     for argument in arguments.args:
         argument.ctx = ast.Param()
