@@ -17,13 +17,15 @@ def _transform_multiline_assignment_statements(statements):
                              and type(statement.op) is _ast.LShift
                              and type(statement.left) is _ast.Name]
 
+    other_statements = [statement for statement in statements if statement not in assignment_statements]
+
     assignments = [ast.Assign(targets=[statement.left], value=statement.right, lineno=statement.lineno, col_offset=statement.col_offset)
             for statement in assignment_statements]
 
     for assignment in assignments:
         assignment.targets[0].ctx = ast.Store()
 
-    return assignments
+    return other_statements + assignments
 
 
 def _transform_multiline_return_statement(return_statement):
@@ -57,6 +59,11 @@ class FunctionNodeVisitor(ast.NodeTransformer):
                                     and (type(child.value.left) == _ast.Tuple or type(child.value.left) == _ast.Name)
                                     and all(map(lambda t: type(t) == _ast.Name, getattr(child.value.left, 'elts', [])))]
 
+        # Support single line lambdas outside of assigns
+        other_children = [child for child in children if child not in lambda_assign_children]
+        for child in other_children:
+            CompareNodeVisitor().visit(child)
+
         for assign_type_child in lambda_assign_children:
             arguments = _transform_function_arguments(assign_type_child.value.left)
             function_body = assign_type_child.value.comparators[0]
@@ -65,7 +72,7 @@ class FunctionNodeVisitor(ast.NodeTransformer):
                 all_statements = function_body.elts
 
                 return_statement = all_statements[-1]
-                statements = all_statements[0:-1]
+                statements = all_statements[0:len(all_statements) - 1]
 
                 statements = _transform_multiline_assignment_statements(statements)
                 return_statement = _transform_multiline_return_statement(return_statement)
@@ -97,6 +104,30 @@ class FunctionNodeVisitor(ast.NodeTransformer):
                 assign_type_child.value = lambda_ast_transform
 
         return node
+
+class CompareNodeVisitor(ast.NodeTransformer):
+
+    def visit_Compare(self, node):
+        """
+        :type node: _ast.FunctionDef
+        """
+
+        is_lambda_def = len(node.ops) == 1\
+                        and type(node.ops[0]) is _ast.Gt \
+                        and (type(node.left) is _ast.Tuple or type(node.left) is _ast.Name) \
+                        and all(map(lambda t: type(t) == _ast.Name, getattr(node.left, 'elts', [])))
+
+        if not is_lambda_def:
+            return node
+
+        arguments = _transform_function_arguments(node.left)
+        function_body = node.comparators[0]
+
+        lambda_ast_transform = ast.Lambda(args=arguments,
+                                          body=function_body,
+                                          lineno=node.lineno,
+                                          col_offset = node.col_offset)
+        return lambda_ast_transform
 
 def _transform_ast(code_ast):
     code_ast = FunctionNodeVisitor().visit(code_ast)

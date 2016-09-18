@@ -20,6 +20,25 @@ class GivenAZenDecorator(unittest.TestCase):
         self.assertTrue(lambdaContainer.func(2) == 3)
         self.assertTrue(lambdaContainer.func(3) == 4)
 
+    def test_It_creates_lists_of_single_line_lambdas(self):
+
+        @zen
+        def normalizeString(nS):
+            transforms = [
+                (s) > s.strip(),
+                (s) > s.lower(),
+                (s) > s.replace(' ', '_')]
+
+            apply_all = (transforms_list, s) > (
+                is_done << (len(transforms_list) == 0),
+                transforms_list[0](apply_all(transforms_list[1:], s)) if not is_done else s)
+
+            return apply_all(transforms, nS)
+
+        self.assertTrue(normalizeString("Abraham Lincoln") == "abraham_lincoln")
+
+
+
     def test_It_creates_functions_from_nonbound_lambda_assigns(self):
 
         @zen

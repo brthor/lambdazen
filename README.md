@@ -47,3 +47,26 @@ example.multiline(1,2,3)
 [Read the story](https://github.com/brthornbury/lambdazen/blob/master/HowItWorks.md)
 
 TLDR; Runtime in-memory source rewriting and recompilation
+
+**Additional Examples**
+
+```python
+from lambdazen import zen
+
+# Lambdas don't need to be bound to the function
+@zen
+def normalizeString(nS):
+    transforms = [
+        (s) > s.strip(),
+        (s) > s.lower(),
+        (s) > s.replace(' ', '_')]
+
+    apply_all = (transforms_list, s) > (
+        is_done << (len(transforms_list) == 0),
+        transforms_list[0](apply_all(transforms_list[1:], s)) if not is_done else s)
+
+    return apply_all(transforms, nS)
+
+normalizeString("Abraham Lincoln")
+>>> "abraham_lincoln"
+```
