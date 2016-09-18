@@ -53,8 +53,6 @@ class FunctionNodeVisitor(ast.NodeTransformer):
         lambda_assign_children = [child for child in children
                                 if type(child) == _ast.Assign
                                     and len(child.targets) == 1
-                                    and type(child.targets[0]) is _ast.Attribute
-                                    and type(child.targets[0].value) is _ast.Name
                                     and type(child.value) == _ast.Compare
                                     and (type(child.value.left) == _ast.Tuple or type(child.value.left) == _ast.Name)
                                     and all(map(lambda t: type(t) == _ast.Name, getattr(child.value.left, 'elts', [])))]
@@ -72,11 +70,17 @@ class FunctionNodeVisitor(ast.NodeTransformer):
                 statements = _transform_multiline_assignment_statements(statements)
                 return_statement = _transform_multiline_return_statement(return_statement)
 
+                assign_target = assign_type_child.targets[0]
+                if type(assign_target) is _ast.Attribute:
+                    function_name = assign_target.attr
+                else:
+                    function_name = assign_target.id
+
                 all_transformed_statements = statements + [return_statement]
                 functiondef_object = ast.FunctionDef(args = arguments,
                                                      body=all_transformed_statements,
                                                      lineno=assign_type_child.lineno,
-                                                     name=assign_type_child.targets[0].attr,
+                                                     name=function_name,
                                                      col_offset=assign_type_child.col_offset,
                                                      decorator_list=[])
 

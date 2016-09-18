@@ -20,6 +20,23 @@ class GivenAZenDecorator(unittest.TestCase):
         self.assertTrue(lambdaContainer.func(2) == 3)
         self.assertTrue(lambdaContainer.func(3) == 4)
 
+    def test_It_creates_functions_from_nonbound_lambda_assigns(self):
+
+        @zen
+        def lambdaContainer():
+            nonBound = (x) > x + 1
+            self.assertTrue(nonBound(1) == 2)
+
+        lambdaContainer()
+
+    def test_It_creates_functions_that_can_use_local_scope(self):
+        @zen
+        def lambdaContainer(local_var):
+            lambdaContainer.func = (y) > y + local_var
+
+        lambdaContainer(2)
+        self.assertTrue(lambdaContainer.func(2) == 4)
+
     def test_It_creates_functions_out_of_multiline_syntax(self):
         outer_var = 's'
 
@@ -53,6 +70,13 @@ class GivenAZenDecorator(unittest.TestCase):
             lambdaContainer.singleLineTest = () > (
                 1
             )
+
+            nonBoundLambdaTest = () > (
+                s << "yes",
+                s)
+
+            self.assertTrue(nonBoundLambdaTest() == "yes")
+
         lambdaContainer()
 
         self.assertTrue(lambdaContainer.func(1,2,3) == 6)
