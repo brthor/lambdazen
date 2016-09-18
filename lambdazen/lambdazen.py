@@ -131,7 +131,7 @@ class CompareNodeVisitor(ast.NodeTransformer):
         lambda_ast_transform = ast.Lambda(args=arguments,
                                           body=function_body,
                                           lineno=node.lineno,
-                                          col_offset = node.col_offset)
+                                          col_offset=node.col_offset)
         return lambda_ast_transform
 
 def _transform_ast(code_ast):
