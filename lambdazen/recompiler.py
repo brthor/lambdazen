@@ -14,6 +14,16 @@ class RewrittenFunctionRecompiler(object):
         return new_function
 
     def _gather_original_scope_for_exec_in_dict(self):
+        """
+        It may seem surprising that this function collapses the local and global scope of the original function into a
+        single scope, but unfortunately when `exec` is provided with local and global scope dictionaries, it treats the
+        recompiled function as if it were a class function effectively inserting an argument into the function
+        definition (self).
+
+        When the scope is collapsed into a single dict, the correct behavior seems to be retained with respect to module,
+        (as shown by tests).
+        It is possible this will be an area of trouble in cases not yet covered by the tests.
+        """
         zen_frame = self._find_zen_frame()
         zen_frame_globals, zen_frame_locals = zen_frame.f_globals, zen_frame.f_locals
 

@@ -118,9 +118,7 @@ class FunctionNodeVisitor(ast.NodeTransformer):
 
 class CompareNodeVisitor(ast.NodeTransformer):
     def visit_Compare(self, node):
-        """
-        :type node: _ast.FunctionDef
-        """
+        # type: (_ast.CompareNode) -> ast.Lambda
 
         is_lambda_def = len(node.ops) == 1 \
                         and type(node.ops[0]) is _ast.Gt \
