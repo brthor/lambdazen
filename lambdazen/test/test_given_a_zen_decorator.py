@@ -1,4 +1,9 @@
-import unittest
+import sys
+if sys.version_info < (2, 7):
+    import unittest2 as unittest
+else:
+    import unittest
+
 from lambdazen import zen
 
 module_var = "module_var"
@@ -220,6 +225,3 @@ class GivenAZenDecorator(unittest.TestCase):
 
         self.assertTrue(lambdaContainer.func() == "module_var")
         self.assertTrue(lambdaContainer.func2("t") == "module_varst")
-
-
-
