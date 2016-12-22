@@ -1,1 +1,1 @@
-from .lambdazen import zen
+from .zen import zen

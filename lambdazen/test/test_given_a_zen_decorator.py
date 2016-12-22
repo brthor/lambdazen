@@ -4,13 +4,23 @@ from lambdazen import zen
 module_var = "module_var"
 
 class GivenAZenDecorator(unittest.TestCase):
+    def test_It_supports_nested_lambdas(self):
+        self.skipTest("TODO: nested lambdas not yet supported")
+
+        @zen
+        def lambdaContainer():
+            l = (x) > ((y) > (y + x))
+            self.assertTrue(l(1)(3) == 4)
+
+        lambdaContainer()
+
     def test_It_creates_functions_from_alternate_lambda_syntax(self):
 
         @zen
         def lambdaContainer():
             lambdaContainer.func = (x) > x + 1
 
-            lambdaContainer.x = lambda y: y+1
+            lambdaContainer.x = (y) in y+1
 
         lambdaContainer()
 
@@ -48,7 +58,10 @@ class GivenAZenDecorator(unittest.TestCase):
         @zen
         def lambdaContainer():
             nonBound = (x) > x + 1
+            nonBoundIn = (x) in x + 1
+
             self.assertTrue(nonBound(1) == 2)
+            self.assertTrue(nonBoundIn(1) == 2)
 
         lambdaContainer()
 
@@ -94,6 +107,15 @@ class GivenAZenDecorator(unittest.TestCase):
                 1
             )
 
+            lambdaContainer.multiLineInTest = (x) in (
+                s << x + 1,
+                s
+            )
+
+            lambdaContainer.singleLineInTest = (x) in (
+                x + 1
+            )
+
             nonBoundLambdaTest = () > (
                 s << "yes",
                 s)
@@ -108,6 +130,8 @@ class GivenAZenDecorator(unittest.TestCase):
         self.assertTrue(lambdaContainer.moduleFunc() == module_var)
         self.assertTrue(lambdaContainer.combinedScopeFunc("t") == (module_var + outer_var + "t"))
         self.assertTrue(lambdaContainer.singleLineTest() == 1)
+        self.assertTrue(lambdaContainer.multiLineInTest(1) == 2)
+        self.assertTrue(lambdaContainer.singleLineInTest(1) == 2)
 
     def test_It_creates_functions_with_multiple_arguments(self):
         
@@ -123,10 +147,12 @@ class GivenAZenDecorator(unittest.TestCase):
         @zen
         def lambdaContainer():
             lambdaContainer.func = () > "hello"
+            lambdaContainer.func2 = () in "hello"
 
         lambdaContainer()
 
         self.assertTrue(lambdaContainer.func() == "hello")
+        self.assertTrue(lambdaContainer.func2() == "hello")
 
     def test_It_creates_functions_that_call_other_functions(self):
         def otherfunc(*args):
